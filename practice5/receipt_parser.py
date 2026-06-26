@@ -4,33 +4,29 @@ from decimal import Decimal
 from pathlib import Path
 
 
+# This function shows basic regex methods: search, findall, split, and sub.
 def regex_examples():
     print("Regex examples")
     print("search:", re.search(r"Python", "I love Python").group())
     print("findall:", re.findall(r"\d+", "Price 10 and 20"))
     print("split:", re.split(r"\s+", "one two three"))
     print("sub:", re.sub(r"cat", "dog", "cat and cat"))
-
-    print("\nMetacharacters:")
-    print(re.search(r"^H.*d$", "Hello"))
-
-    print("\nSpecial sequences:")
-    print(re.findall(r"\d+", "I have 2 cats and 10 dogs"))
-
-    print("\nQuantifiers:")
-    print(re.findall(r"\w{2,4}", "ab cdef ghijk"))
+    # Example output: search -> Python, findall -> ['10', '20'], split -> ['one', 'two', 'three'], sub -> dog and dog
 
 
+# This function reads the receipt file from disk.
 def read_receipt(path):
     return Path(path).read_text(encoding="utf-8")
 
 
+# This function extracts price-like values from the receipt text.
 def parse_prices(text):
     pattern = r"\b\d[\d\s]*,\d{2}\b"
     matches = re.findall(pattern, text)
     return [match.strip() for match in matches]
 
 
+# This function extracts the product names by reading the numbered lines in the receipt.
 def parse_product_names(text):
     lines = [line.strip() for line in text.splitlines() if line.strip()]
     products = []
@@ -43,6 +39,7 @@ def parse_product_names(text):
     return products
 
 
+# This function finds the total amount using a regex pattern for the receipt footer.
 def parse_total_amount(text):
     match = re.search(r"ИТОГО:\s*(\d[\d\s]*,\d{2})", text)
     if match:
@@ -50,6 +47,7 @@ def parse_total_amount(text):
     return None
 
 
+# This function extracts the date and time from the receipt text.
 def parse_datetime(text):
     match = re.search(r"Время:\s*(\d{2}\.\d{2}\.\d{4}\s+\d{2}:\d{2}:\d{2})", text)
     if match:
@@ -57,6 +55,7 @@ def parse_datetime(text):
     return None
 
 
+# This function detects the payment method used on the receipt.
 def parse_payment_method(text):
     match = re.search(r"Банковская\s+карта", text)
     if match:
@@ -64,10 +63,12 @@ def parse_payment_method(text):
     return None
 
 
+# This function converts receipt prices into a normal decimal string format.
 def format_amount(value):
     return str(Decimal(value.replace(" ", "").replace(",", ".")))
 
 
+# This function combines all parsed fields into a structured dictionary.
 def build_structured_output(text):
     prices = parse_prices(text)
     product_names = parse_product_names(text)
@@ -84,6 +85,7 @@ def build_structured_output(text):
     }
 
 
+# This function runs the requested regex exercises and prints their results.
 def run_regex_exercises():
     print("\nRegex exercises")
 
@@ -99,30 +101,37 @@ def run_regex_exercises():
         print(f"\n{label}")
         for value in values:
             print(value, "->", bool(re.fullmatch(pattern, value)))
+    # Example output shows True/False values for each pattern.
 
     print("\n6. Replace space, comma, or dot with a colon")
     text = "hello, world. python"
     print(re.sub(r"[\s,.]", ":", text))
+    # Example output: hello::world::python
 
     print("\n7. Snake case to camel case")
     snake = "hello_world_python"
     parts = snake.split("_")
     camel = parts[0] + "".join(word.capitalize() for word in parts[1:])
     print(camel)
+    # Example output: helloWorldPython
 
     print("\n8. Split a string at uppercase letters")
     mixed = "helloWorldPython"
     print(re.sub(r"(?=[A-Z])", " ", mixed))
+    # Example output: hello World Python
 
     print("\n9. Insert spaces between words starting with capital letters")
     text2 = "HelloWorldPython"
     print(re.sub(r"(?=[A-Z])", " ", text2).strip())
+    # Example output: Hello World Python
 
     print("\n10. Camel case to snake case")
     camel = "camelCaseString"
     print(re.sub(r"(?<!^)(?=[A-Z])", "_", camel).lower())
+    # Example output: camel_case_string
 
 
+# This function runs the full example suite including the receipt parser.
 def main():
     regex_examples()
     run_regex_exercises()
@@ -133,21 +142,27 @@ def main():
     print("\nReceipt parsing results")
     print("1. Extract all prices")
     print(parse_prices(receipt_text))
+    # Example output: a list of price values from the receipt
 
     print("\n2. Find all product names")
     print(parse_product_names(receipt_text))
+    # Example output: a list of the receipt product names
 
     print("\n3. Calculate total amount")
     print(parse_total_amount(receipt_text))
+    # Example output: 18 009,00
 
     print("\n4. Extract date and time information")
     print(parse_datetime(receipt_text))
+    # Example output: 18.04.2019 11:13:58
 
     print("\n5. Find payment method")
     print(parse_payment_method(receipt_text))
+    # Example output: Банковская карта
 
     print("\n6. Structured output")
     print(json.dumps(build_structured_output(receipt_text), ensure_ascii=False, indent=2))
+    # Example output: a JSON object with prices, product names, total amount, date/time, and payment method
 
 
 if __name__ == "__main__":
