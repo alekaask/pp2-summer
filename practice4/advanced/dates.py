@@ -1,0 +1,56 @@
+# Interactive date and time operations
+
+from datetime import datetime, timedelta
+
+
+def subtract_five_days():
+    current_date = datetime.now().date()
+    print(current_date - timedelta(days=5))
+
+
+def print_dates():
+    today = datetime.now().date()
+    print("Yesterday:", today - timedelta(days=1))
+    print("Today:", today)
+    print("Tomorrow:", today + timedelta(days=1))
+
+
+def drop_microseconds():
+    now = datetime.now()
+    print(now.replace(microsecond=0))
+
+
+def date_difference_seconds():
+    date1 = datetime(2024, 1, 1, 12, 0, 0)
+    date2 = datetime(2024, 1, 2, 12, 0, 0)
+    print((date2 - date1).total_seconds())
+
+
+def main():
+    while True:
+        print("\nDate Menu")
+        print("1. Subtract five days from today")
+        print("2. Show yesterday, today, and tomorrow")
+        print("3. Remove microseconds")
+        print("4. Difference between two dates in seconds")
+        print("5. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            subtract_five_days()
+        elif choice == "2":
+            print_dates()
+        elif choice == "3":
+            drop_microseconds()
+        elif choice == "4":
+            date_difference_seconds()
+        elif choice == "5":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice.")
+
+
+if __name__ == "__main__":
+    main()
