@@ -3,6 +3,6 @@ def load_config():
         "host": "localhost",
         "database": "suppliers",
         "user": "postgres",
-        "password": "ppappap228",
-        "port": 5432
+        "password": "",
+        "port": 5433
     }
